@@ -1,2 +1,4 @@
-# OWLSyntaxConverter
-Utility to convert OWL ontologies to different formats, including OWL syntaxes and RDF/XML.
+OWL Syntax Converter
+--------------------
+
+A small utility to convert an OWL ontology to a different format, including several OWL syntaxes and RDF/XML.
