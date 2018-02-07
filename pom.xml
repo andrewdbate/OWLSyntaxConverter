@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.andrewbate.owlutil</groupId>
+    <artifactId>OWLSyntaxConverter</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+    <name>OWL Syntax Converter</name>
+    <url>https://www.example.com</url>
+
+    <developers>
+        <developer>
+            <id>andrewdbate</id>
+            <name>Andrew D Bate</name>
+            <email>code@andrewbate.com</email>
+            <url>https://www.andrewbate.com</url>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.java.version>1.8</project.java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <mainClass>com.andrewbate.owlutil.OWLSyntaxConverter</mainClass>
+        <cli.executable.name>owlconvert</cli.executable.name>
+        <launch4j.version>${project.version}.0</launch4j.version>
+        <launch4j.min.jre.version>1.8.0</launch4j.min.jre.version>
+        <launch4j.copyright>Copyright 2018 Andrew Bate (code@andrewbate.com)</launch4j.copyright>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-distribution</artifactId>
+            <version>5.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${project.java.version}</source>
+                    <target>${project.java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <failOnWarning>true</failOnWarning>
+                    <showWarnings>true</showWarnings>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- Build the assembly jar for the CLI. -->
+                        <id>make-assembly-cli</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${basedir}/src/assembly/cli-assembly.xml</descriptor> 
+                            </descriptors>
+                            <finalName>${cli.executable.name}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <archive>
+                                <manifest>
+                                    <mainClass>${mainClass}</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.7.21</version>
+                <executions>
+                    <execution>
+                        <id>l4j-clui</id>
+                        <phase>package</phase>
+                        <goals><goal>launch4j</goal></goals>
+                        <configuration>
+                            <headerType>console</headerType>
+                            <outfile>${project.build.directory}/${cli.executable.name}.exe</outfile>
+                            <jar>${project.build.directory}/${cli.executable.name}.jar</jar>
+                            <errTitle>${project.artifactId}</errTitle>
+                            <classPath>
+                                <mainClass>${mainClass}</mainClass>
+                                <addDependencies>false</addDependencies>
+                                <preCp>anything</preCp>
+                            </classPath>
+                            <jre>
+                                <minVersion>${launch4j.min.jre.version}</minVersion>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>${launch4j.version}</fileVersion>
+                                <txtFileVersion>${launch4j.version}</txtFileVersion>
+                                <fileDescription>${project.name}</fileDescription>
+                                <copyright>${launch4j.copyright}</copyright>
+                                <productVersion>${launch4j.version}</productVersion>
+                                <txtProductVersion>${launch4j.version}</txtProductVersion>
+                                <productName>${project.name}</productName>
+                                <internalName>${cli.executable.name}</internalName>
+                                <originalFilename>${cli.executable.name}.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
